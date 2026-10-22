@@ -1,0 +1,54 @@
+{% render 'cc-assets' %}
+<section class="cc-tiles">
+  <div class="cc-wrap">
+    <div class="cc-tiles__grid">
+      {%- for block in section.blocks -%}
+        {%- assign col = block.settings.collection -%}
+        {%- if col != blank -%}{%- assign href = col.url -%}{%- else -%}{%- assign href = block.settings.url | default: '#' -%}{%- endif -%}
+        <a class="cc-tile{% if block.settings.highlight %} cc-tile--hot{% endif %}" href="{{ href }}" {{ block.shopify_attributes }}>
+          <h3 class="cc-tile__title">{{ block.settings.title }}</h3>
+          <p class="cc-tile__text">
+            {%- if col != blank and block.settings.count_suffix != blank -%}
+              {{ col.products_count }} {{ block.settings.count_suffix }}
+            {%- else -%}
+              {{ block.settings.text }}
+            {%- endif -%}
+          </p>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "CC Promo tiles",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tile",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Free shipping $35+" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Combined shipping on every order" },
+        { "type": "collection", "id": "collection", "label": "Link to collection (optional)" },
+        { "type": "text", "id": "count_suffix", "label": "Live count text", "info": "With a collection chosen, shows e.g. 34 cards in the bin instead of the text above." },
+        { "type": "url", "id": "url", "label": "Link (used if no collection)" },
+        { "type": "checkbox", "id": "highlight", "label": "Orange highlight", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CC Promo tiles",
+      "blocks": [
+        { "type": "tile", "settings": { "title": "Free shipping $35+", "text": "Combined shipping on every order", "highlight": true } },
+        { "type": "tile", "settings": { "title": "Weekly giveaway", "text": "A PSA 10 slab every Sunday" } },
+        { "type": "tile", "settings": { "title": "$2 & under", "count_suffix": "cards in the bin", "text": "Budget cards" } },
+        { "type": "tile", "settings": { "title": "$5 bin", "text": "Numbered, parallels, rookies" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

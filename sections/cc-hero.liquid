@@ -1,0 +1,79 @@
+{% render 'cc-assets' %}
+<section class="cc-hero">
+  <div class="cc-wrap cc-hero__grid">
+    <div class="cc-hero__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="cc-hero__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <h1 class="cc-hero__title">
+        <span>{{ section.settings.line_1 }}</span>
+        <span class="cc-hot">{{ section.settings.line_2 }}<span class="cc-dot">.</span></span>
+      </h1>
+      <p class="cc-hero__text">{{ section.settings.text }}</p>
+      <div class="cc-hero__actions">
+        {%- if section.settings.button_1_label != blank -%}
+          <a class="cc-btn cc-btn--primary" href="{{ section.settings.button_1_url | default: '#' }}">{{ section.settings.button_1_label }}</a>
+        {%- endif -%}
+        {%- if section.settings.button_2_label != blank -%}
+          <a class="cc-btn cc-btn--outline" href="{{ section.settings.button_2_url | default: '#' }}">{{ section.settings.button_2_label }}</a>
+        {%- endif -%}
+      </div>
+
+      <div class="cc-stats">
+        {%- for block in section.blocks -%}
+          <div class="cc-stat" {{ block.shopify_attributes }}>
+            <div class="cc-stat__value">
+              {%- if block.settings.use_count -%}{{ collections.all.products_count }}+{%- else -%}{{ block.settings.value }}{%- endif -%}
+            </div>
+            <div class="cc-stat__label">{{ block.settings.label }}</div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="cc-hero__media">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 900 | image_tag: loading: 'eager', widths: '450, 600, 900', sizes: '(min-width: 960px) 40vw, 80vw', alt: section.settings.image.alt | default: shop.name }}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "CC Hero",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Small label", "default": "Sports cards · TCG · Graded slabs" },
+    { "type": "text", "id": "line_1", "label": "Headline line 1", "default": "Forge your" },
+    { "type": "text", "id": "line_2", "label": "Headline line 2 (gradient)", "default": "Collection" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "From $1 bin cards to PSA 10 grails, every card is photographed, priced fairly and shipped protected from Texas the next business day." },
+    { "type": "text", "id": "button_1_label", "label": "Primary button", "default": "Shop new arrivals" },
+    { "type": "url", "id": "button_1_url", "label": "Primary button link" },
+    { "type": "text", "id": "button_2_label", "label": "Secondary button", "default": "Enter this week's giveaway" },
+    { "type": "url", "id": "button_2_url", "label": "Secondary button link" },
+    { "type": "image_picker", "id": "image", "label": "Hero image (logo)" }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "limit": 4,
+      "settings": [
+        { "type": "checkbox", "id": "use_count", "label": "Show live product count instead of value", "default": false },
+        { "type": "text", "id": "value", "label": "Value", "default": "4.9★" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Buyer rating" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CC Hero",
+      "blocks": [
+        { "type": "stat", "settings": { "use_count": true, "label": "Cards listed" } },
+        { "type": "stat", "settings": { "value": "4.9★", "label": "Buyer rating" } },
+        { "type": "stat", "settings": { "value": "24h", "label": "Ship time" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
